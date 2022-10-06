@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: postgre
+    restart: always
+    # platform: 'linux/x86_64'
+    image: bitnami/postgresql:14
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRESQL_USERNAME=postgre
+      - POSTGRESQL_PASSWORD=postgre
+      - POSTGRESQL_DATABASE=postgre 
+    volumes:
+      - ./postgresql:/var/lib/postgresql
+    networks:
+      - net-postgres
+
+networks:
+  net-postgres:
+    driver: bridge
