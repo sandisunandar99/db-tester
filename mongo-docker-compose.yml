@@ -4,7 +4,7 @@ services:
   mongodb:
     container_name: mongodb
     image: bitnami/mongodb:6.0
-    # platform: 'linux/x86_64'
+    platform: 'linux/x86_64'
     restart: always
     ports:
       - 27017:27017
