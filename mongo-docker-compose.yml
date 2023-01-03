@@ -15,10 +15,10 @@ services:
     networks:
       - app-tier
     environment:
-      # - MONGODB_ROOT_PASSWORD=mongodb
-      # - MONGODB_USERNAME=mongodb
-      # - MONGODB_PASSWORD=mongodb
-      # - MONGODB_DATABASE-mongodb
+      - MONGODB_ROOT_PASSWORD=mongodb
+      - MONGODB_USERNAME=mongodb
+      - MONGODB_PASSWORD=mongodb
+      - MONGODB_DATABASE-mongodb
       - MONGODB_PORT_NUMBER=27017
       - ALLOW_EMPTY_PASSWORD=yes
       - MONGODB_EXTRA_FLAGS=--wiredTigerCacheSizeGB=2
