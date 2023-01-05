@@ -3,31 +3,38 @@ version: '3'
 services:
   mongodb:
     container_name: mongodb
-    image: bitnami/mongodb:6.0
-    platform: 'linux/x86_64'
+    # image: bitnami/mongodb:6.0
+    image: mongo:4.2.23-bionic
+    # platform: 'linux/x86_64'
     restart: always
     ports:
       - 27017:27017
     volumes:
-      - mongodb_data:/bitnami/mongodb
+      # - mongodb_data:/bitnami/mongodb
+      - mongodb:/data/db
+      - mongodb_config:/data/configdb
     extra_hosts:
-      - docker.for.mac.host.internal:host-gateway
+      - docker.for.win.host.internal:host-gateway
     networks:
       - app-tier
     environment:
-      - MONGODB_ROOT_PASSWORD=mongodb
-      - MONGODB_USERNAME=mongodb
-      - MONGODB_PASSWORD=mongodb
-      - MONGODB_DATABASE-mongodb
-      - MONGODB_PORT_NUMBER=27017
-      - ALLOW_EMPTY_PASSWORD=yes
-      - MONGODB_EXTRA_FLAGS=--wiredTigerCacheSizeGB=2
-      - MONGODB_DISABLE_SYSTEM_LOG=false
-      - MONGODB_ENABLE_DIRECTORY_PER_DB=yes
+      # - MONGODB_ROOT_PASSWORD=mongodb
+      # - MONGODB_USERNAME=mongodb
+      # - MONGODB_PASSWORD=mongodb
+      # - MONGODB_DATABASE-mongodb
+      # - MONGODB_PORT_NUMBER=27017
+      # - ALLOW_EMPTY_PASSWORD=yes
+      # - MONGODB_EXTRA_FLAGS=--wiredTigerCacheSizeGB=2
+      # - MONGODB_DISABLE_SYSTEM_LOG=false
+      # - MONGODB_ENABLE_DIRECTORY_PER_DB=yes
+      MONGO_INITDB_ROOT_USERNAME: mongodb
+      MONGO_INITDB_ROOT_PASSWORD: mongodb
 
 volumes:
-  mongodb_data:
-    driver: local
+  # mongodb_data:
+  #   driver: local
+  mongodb:
+  mongodb_config:
 
 networks:
   app-tier:
