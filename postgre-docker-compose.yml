@@ -4,16 +4,32 @@ services:
   postgres:
     container_name: postgre
     restart: always
-    # platform: 'linux/x86_64'
-    image: bitnami/postgresql:14
+    platform: linux/x86_64
+    image: postgres:14-alpine
     ports:
       - "5432:5432"
     environment:
-      - POSTGRESQL_USERNAME=postgre
-      - POSTGRESQL_PASSWORD=postgre
-      - POSTGRESQL_DATABASE=postgre 
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "${POSTGRES_DB}"
     volumes:
       - ./postgresql:/var/lib/postgresql
+    networks:
+      - net-postgres
+
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      ADMINER_DEFAULT_DB_DRIVER: postgres
+      ADMINER_DEFAULT_DB_HOST: postgres
+      ADMINER_DEFAULT_DB_NAME: postgres
+      # ADMINER_DESIGN: nette
+      ADMINER_PLUGINS: tables-filter tinymce
+    ports:
+      - 8084:8080
     networks:
       - net-postgres
 

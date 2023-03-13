@@ -3,27 +3,47 @@ version: '3'
 services:
   mongodb:
     container_name: mongodb
-    image: bitnami/mongodb:6.0
+    # image: bitnami/mongodb:6.0
+    image: mongo:4.2.23-bionic
     platform: 'linux/x86_64'
     restart: always
     ports:
       - 27017:27017
     volumes:
-      - mongodb_data:/bitnami/mongodb
+      - mongodb_data:/mongodb
     extra_hosts:
       - docker.for.mac.host.internal:host-gateway
     networks:
       - app-tier
     environment:
-      - MONGODB_ROOT_PASSWORD=mongodb
-      - MONGODB_USERNAME=mongodb
-      - MONGODB_PASSWORD=mongodb
-      - MONGODB_DATABASE-mongodb
-      - MONGODB_PORT_NUMBER=27017
-      - ALLOW_EMPTY_PASSWORD=yes
-      - MONGODB_EXTRA_FLAGS=--wiredTigerCacheSizeGB=2
-      - MONGODB_DISABLE_SYSTEM_LOG=false
-      - MONGODB_ENABLE_DIRECTORY_PER_DB=yes
+      #=================== jika menggunakan bitnami image =========
+      # - MONGODB_ROOT_PASSWORD=mongodb
+      # - MONGODB_USERNAME=mongodb
+      # - MONGODB_PASSWORD=mongodb
+      # - MONGODB_DATABASE-mongodb
+      # - MONGODB_PORT_NUMBER=27017
+      # - ALLOW_EMPTY_PASSWORD=yes
+      # - MONGODB_EXTRA_FLAGS=--wiredTigerCacheSizeGB=2
+      # - MONGODB_DISABLE_SYSTEM_LOG=false
+      # - MONGODB_ENABLE_DIRECTORY_PER_DB=yes
+      # ================= jika menggunakan official mongo ========
+      - MONGO_INITDB_ROOT_USERNAME=mongodb
+      - MONGO_INITDB_ROOT_PASSWORD=mongodb
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8082:8081
+    environment:
+      VCAP_APP_HOST: localhost
+      PORT: 8082
+      ME_CONFIG_MONGODB_AUTH_USERNAME: mongodb
+      ME_CONFIG_MONGODB_AUTH_PASSWORD: mongodb
+      ME_CONFIG_MONGODB_ADMINUSERNAME: mongodb
+      ME_CONFIG_MONGODB_ADMINPASSWORD: mongodb
+      ME_CONFIG_MONGODB_URL: mongodb://mongodb:mongodb@mongodb:27017
+    networks:
+      - app-tier
 
 volumes:
   mongodb_data:

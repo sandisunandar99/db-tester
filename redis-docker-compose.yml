@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  redis:
+    image: bitnami/redis:6.2.11
+    container_name: redis
+    platform: 'linux/x86_64'
+    restart: always
+    environment:
+      - REDIS_PASSWORD="${REDIS_PASSWORD}"
+    ports:
+      - "6379:6379"
+    volumes:
+      - ${REDIS_DATA_DIR-./data/redis}:/data/redis
+    networks:
+      - net-red
+
+networks:
+  net-red:
+    driver: bridge
