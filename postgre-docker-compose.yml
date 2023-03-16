@@ -16,6 +16,7 @@ services:
       - ./postgresql:/var/lib/postgresql
     networks:
       - net-postgres
+      - external-network
 
   adminer:
     container_name: adminer
@@ -27,7 +28,11 @@ services:
       - 8084:8080
     networks:
       - net-postgres
+      - external-network
 
 networks:
+  external-network:
+    external: true
   net-postgres:
     driver: bridge
+  

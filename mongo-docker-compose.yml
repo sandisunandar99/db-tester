@@ -10,11 +10,12 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - mongodb_data:/mongodb
+      - mongodb_data:/data/db
     extra_hosts:
       - docker.for.mac.host.internal:host-gateway
     networks:
-      - app-tier
+      - net-mongo
+      - external-network
     environment:
       #=================== jika menggunakan bitnami image =========
       # - MONGODB_ROOT_PASSWORD=mongodb
@@ -30,26 +31,29 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=mongodb
       - MONGO_INITDB_ROOT_PASSWORD=mongodb
   mongo-express:
-    image: mongo-express
+    image: mongo-express:latest
+    container_name: mongo-express
     restart: always
-    ports:
-      - 8082:8081
     environment:
-      VCAP_APP_HOST: localhost
-      PORT: 8082
-      ME_CONFIG_MONGODB_AUTH_USERNAME: mongodb
-      ME_CONFIG_MONGODB_AUTH_PASSWORD: mongodb
       ME_CONFIG_MONGODB_ADMINUSERNAME: mongodb
       ME_CONFIG_MONGODB_ADMINPASSWORD: mongodb
-      ME_CONFIG_MONGODB_URL: mongodb://mongodb:mongodb@mongodb:27017
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_PORT: "27017"
+    ports:
+      - "0.0.0.0:8081:8081"
+    depends_on:
+      - mongodb
     networks:
-      - app-tier
+      - net-mongo
+      - external-network
 
 volumes:
   mongodb_data:
     driver: local
 
 networks:
-  app-tier:
+  external-network:
+    external: true
+  net-mongo:
     driver: bridge
   

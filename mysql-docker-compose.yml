@@ -18,8 +18,8 @@ services:
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
     networks:
-      - net-dash
-
+      - external-network
+      - net-mysql
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
@@ -36,8 +36,11 @@ services:
     volumes: 
       - /sessions
     networks:
-      - net-dash
+      - external-network
+      - net-mysql
 
 networks:
-  net-dash:
+  external-network:
+    external: true
+  net-mysql:
     driver: bridge

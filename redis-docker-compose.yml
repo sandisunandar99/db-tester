@@ -13,8 +13,12 @@ services:
     volumes:
       - ${REDIS_DATA_DIR-./data/redis}:/data/redis
     networks:
-      - net-red
+      - external-network
+      - net-redis
 
 networks:
-  net-red:
+  external-network:
+    external: true
+  net-redis:
     driver: bridge
+  
