@@ -13,6 +13,7 @@ services:
       - mongodb_data:/data/db
     extra_hosts:
       - docker.for.mac.host.internal:host-gateway
+      - docker.for.win.host.internal:host-gateway
     networks:
       - net-mongo
       - external-network
