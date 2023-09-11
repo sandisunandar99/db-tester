@@ -5,15 +5,15 @@ services:
     container_name: postgres
     restart: always
     platform: linux/x86_64
-    image: bitnami/postgresql:14
+    image: postgres:15
     ports:
       - "5432:5432"
     environment:
-      - POSTGRESQL_USERNAME=postgres
-      - POSTGRESQL_PASSWORD=postgres
-      - POSTGRESQL_DATABASE=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
     volumes:
-      - ./postgresql:/var/lib/postgresql
+      - dbdata:/var/lib/postgresql/data
     networks:
       - net-postgres
       - external-network
@@ -35,4 +35,7 @@ networks:
     external: true
   net-postgres:
     driver: bridge
+
+volumes:
+  dbdata:
   

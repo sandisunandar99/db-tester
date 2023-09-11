@@ -7,11 +7,11 @@ services:
     platform: 'linux/x86_64'
     restart: always
     environment:
-      - REDIS_PASSWORD="${REDIS_PASSWORD}"
+      - REDIS_PASSWORD=redis
     ports:
       - "6379:6379"
     volumes:
-      - ${REDIS_DATA_DIR-./data/redis}:/data/redis
+      - ./data/redis:/data/redis
     networks:
       - external-network
       - net-redis
