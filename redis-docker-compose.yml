@@ -2,7 +2,7 @@ version: '3'
 
 services:
   redis:
-    image: bitnami/redis:6.2.11
+    image: redis:alpine
     container_name: redis
     platform: 'linux/x86_64'
     restart: always
