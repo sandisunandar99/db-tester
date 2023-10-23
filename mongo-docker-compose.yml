@@ -14,9 +14,6 @@ services:
     extra_hosts:
       - docker.for.mac.host.internal:host-gateway
       - docker.for.win.host.internal:host-gateway
-    networks:
-      - net-mongo
-      - external-network
     environment:
       #=================== jika menggunakan bitnami image =========
       # - MONGODB_ROOT_PASSWORD=mongodb
@@ -31,6 +28,10 @@ services:
       # ================= jika menggunakan official mongo ========
       - MONGO_INITDB_ROOT_USERNAME=mongodb
       - MONGO_INITDB_ROOT_PASSWORD=mongodb
+    networks:
+      - net-mongo
+      - external-network
+  
   mongo-express:
     image: mongo-express:latest
     container_name: mongo-express
@@ -40,8 +41,9 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: mongodb
       ME_CONFIG_MONGODB_SERVER: mongodb
       ME_CONFIG_MONGODB_PORT: "27017"
+      PORT: "8082"
     ports:
-      - "0.0.0.0:8081:8081"
+      - "0.0.0.0:8082:8081"
     depends_on:
       - mongodb
     networks:
