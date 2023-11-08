@@ -41,7 +41,6 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: mongodb
       ME_CONFIG_MONGODB_SERVER: mongodb
       ME_CONFIG_MONGODB_PORT: "27017"
-      PORT: "8082"
     ports:
       - "0.0.0.0:8082:8081"
     depends_on:
