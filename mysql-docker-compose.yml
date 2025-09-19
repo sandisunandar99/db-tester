@@ -6,7 +6,7 @@ services:
     # image: mysql:5.7
     platform: 'linux/x86_64'
     container_name: mysql
-    restart: 'always'
+    # restart: 'always'
     ports:
       - "3306:3306"
     volumes: 
@@ -25,7 +25,7 @@ services:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
     platform: 'linux/x86_64'
-    restart: 'always'
+    # restart: 'always'
     links:
       - mysql
     environment:
