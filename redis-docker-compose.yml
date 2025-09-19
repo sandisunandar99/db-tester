@@ -6,7 +6,7 @@ services:
     # image: bitnami/redis:7.2
     container_name: redis
     platform: 'linux/x86_64'
-    restart: always
+    # restart: always
     # environment:
     #   - REDIS_PASSWORD=redis
     ports:
@@ -24,7 +24,7 @@ services:
     image: ghcr.io/joeferner/redis-commander:latest
     depends_on:
       - redis
-    restart: always
+    # restart: always
     environment:
     - REDIS_HOSTS=redis
     # - REDIS_PASSWORD=redis
