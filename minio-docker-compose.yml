@@ -4,7 +4,7 @@ services:
   minio:
     image: minio/minio:latest
     container_name: minio_dev
-    restart: unless-stopped
+    # restart: unless-stopped
     ports:
       - "9000:9000"     # MinIO API
       - "9001:9001"     # MinIO Console (Web UI)
