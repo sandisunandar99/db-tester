@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  minio:
+    image: minio/minio:latest
+    container_name: minio_dev
+    # restart: unless-stopped
+    ports:
+      - "9000:9000"     # MinIO API
+      - "9001:9001"     # MinIO Console (Web UI)
+    environment:
+      # Default credentials for development
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+      # Console configuration
+      MINIO_BROWSER: "on"
+      MINIO_CONSOLE_ADDRESS: ":9001"
+    volumes:
+      # Data persistence
+      - minio_data:/data
+      # Optional: Mount local directory instead of named volume
+      # - ./data/minio:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+      start_period: 40s
+    networks:
+      - minio_network
+      - external-network
+
+  # Optional: MinIO Client (mc) for command-line operations
+  minio-client:
+    image: minio/mc:latest
+    container_name: minio_client_dev
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 10;
+      /usr/bin/mc alias set minio http://minio:9000 minioadmin minioadmin123;
+      /usr/bin/mc mb minio/development --ignore-existing;
+      /usr/bin/mc mb minio/testing --ignore-existing;
+      /usr/bin/mc mb minio/uploads --ignore-existing;
+      echo 'MinIO buckets created successfully';
+      exit 0;
+      "
+    networks:
+      - minio_network
+      - external-network
+
+volumes:
+  minio_data:
+    driver: local
+
+networks:
+  external-network:
+    external: true
+  minio_network:
+    driver: bridge

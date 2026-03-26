@@ -3,7 +3,7 @@ version: '3'
 services:
   postgres:
     container_name: postgres
-    restart: always
+    # restart: always
     platform: linux/x86_64
     image: postgres:15
     ports:
@@ -21,7 +21,7 @@ services:
   adminer:
     container_name: adminer
     image: adminer
-    restart: always
+    # restart: always
     depends_on: 
       - postgres
     ports:
