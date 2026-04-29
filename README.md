@@ -33,3 +33,4 @@ Notes:
 - `mongo-express` is disabled by default and enabled via profile `tools`.
 - MongoDB container includes a healthcheck and `mongo-express` waits until MongoDB is healthy.
 - Default `MONGO_IMAGE_TAG` is `4.4.29` to stay compatible with older local data volumes (FCV 4.2).
+- Default mongo-express login: `admin` / `admin` (override with `MONGO_EXPRESS_USERNAME` and `MONGO_EXPRESS_PASSWORD`).

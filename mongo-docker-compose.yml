@@ -33,6 +33,7 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ROOT_USERNAME:-mongodb}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ROOT_PASSWORD:-mongodb}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_ROOT_USERNAME:-mongodb}:${MONGO_ROOT_PASSWORD:-mongodb}@mongodb:27017/?authSource=admin
       ME_CONFIG_MONGODB_SERVER: mongodb
       ME_CONFIG_MONGODB_PORT: "27017"
       ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
