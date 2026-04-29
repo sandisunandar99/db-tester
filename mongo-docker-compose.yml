@@ -1,61 +1,56 @@
-version: '3'
-
 services:
   mongodb:
     container_name: mongodb
-    # image: bitnami/mongodb:6.0
-    image: mongo:6.0
-    platform: 'linux/x86_64'
-    # restart: always
+    image: mongo:${MONGO_IMAGE_TAG:-4.4.29}
+    restart: unless-stopped
     ports:
-      - 27017:27017
+      - "127.0.0.1:${MONGO_PORT:-27017}:27017"
     volumes:
       - mongodb_data:/data/db
-    extra_hosts:
-      - docker.for.mac.host.internal:host-gateway
-      - docker.for.win.host.internal:host-gateway
     environment:
-      #=================== jika menggunakan bitnami image =========
-      # - MONGODB_ROOT_PASSWORD=mongodb
-      # - MONGODB_USERNAME=mongodb
-      # - MONGODB_PASSWORD=mongodb
-      # - MONGODB_DATABASE-mongodb
-      # - MONGODB_PORT_NUMBER=27017
-      # - ALLOW_EMPTY_PASSWORD=yes
-      # - MONGODB_EXTRA_FLAGS=--wiredTigerCacheSizeGB=2
-      # - MONGODB_DISABLE_SYSTEM_LOG=false
-      # - MONGODB_ENABLE_DIRECTORY_PER_DB=yes
-      # ================= jika menggunakan official mongo ========
-      - MONGO_INITDB_ROOT_USERNAME=mongodb
-      - MONGO_INITDB_ROOT_PASSWORD=mongodb
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME:-mongodb}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-mongodb}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE:-app}
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "echo 'db.runCommand({ ping: 1 }).ok' | mongo --quiet --host localhost --port 27017 -u $$MONGO_INITDB_ROOT_USERNAME -p $$MONGO_INITDB_ROOT_PASSWORD --authenticationDatabase admin | grep 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
     networks:
       - net-mongo
-      - external-network
   
   mongo-express:
-    image: mongo-express:latest
+    image: mongo-express:1.0.2-20
     container_name: mongo-express
-    # restart: always
+    restart: unless-stopped
+    profiles:
+      - tools
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: mongodb
-      ME_CONFIG_MONGODB_ADMINPASSWORD: mongodb
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ROOT_USERNAME:-mongodb}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ROOT_PASSWORD:-mongodb}
       ME_CONFIG_MONGODB_SERVER: mongodb
       ME_CONFIG_MONGODB_PORT: "27017"
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USERNAME:-admin}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASSWORD:-admin}
     ports:
-      - "0.0.0.0:8082:8081"
+      - "127.0.0.1:${MONGO_EXPRESS_PORT:-8082}:8081"
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     networks:
       - net-mongo
-      - external-network
 
 volumes:
   mongodb_data:
     driver: local
 
 networks:
-  external-network:
-    external: true
   net-mongo:
     driver: bridge
   
