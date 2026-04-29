@@ -39,4 +39,3 @@ networks:
     external: true
   net-redis:
     driver: bridge
-  
