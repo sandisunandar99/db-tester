@@ -6,7 +6,7 @@ services:
     # image: bitnami/mongodb:6.0
     image: mongo:4.2.23-bionic
     platform: 'linux/x86_64'
-    restart: always
+    # restart: always
     ports:
       - 27017:27017
     volumes:
@@ -35,7 +35,7 @@ services:
   mongo-express:
     image: mongo-express:latest
     container_name: mongo-express
-    restart: always
+    # restart: always
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: mongodb
       ME_CONFIG_MONGODB_ADMINPASSWORD: mongodb
